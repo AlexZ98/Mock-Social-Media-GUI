@@ -29,11 +29,10 @@ public class GUIDriver extends Application {
 
         AdminPanel adminPanel = AdminPanel.getInstance();
         adminPanel.getRoot().setExpanded(true);
-        TreeView<String> treeView = new TreeView<>(AdminPanel.getRoot());
+        TreeView<UserInterface> treeView = new TreeView<>(AdminPanel.getRoot());
 
         StackPane treeContainer = new StackPane();
         treeContainer.getChildren().add(treeView);
-
 
         HBox hb1 = new HBox(15, adminPanel.getUserId(), adminPanel.getGroupId(), adminPanel.getShowUserTotal(), adminPanel.getShowMsgTotal());
         HBox hb2 = new HBox(15, adminPanel.getAddUser(), adminPanel.getAddGroup(),adminPanel.getShowGroupTotal(), adminPanel.getShowPosPercent());
@@ -53,32 +52,34 @@ public class GUIDriver extends Application {
         //In my implementation, I disable the ability to add users or groups until you navigate through a treeview item so that you can add one to the root you are at
             adminPanel.getAddUser().setDisable(false);
             adminPanel.getAddGroup().setDisable(false);
-            TreeItem<String> selectedItem = (TreeItem<String>) newValue;
-            //Scenario in which selected tree item is a leaf AKA student
+            TreeItem<UserInterface> selectedItem = (TreeItem<UserInterface>) newValue;
+            //Scenario in which selected tree item is a leaf AKA student/user
+            //NOTE: Logic applies correctly under the assumption that all necessary additions to the tree are finished
+            //e.g. this logic will result in logic error if a UserGroup has no children, whereas in reality it should have atleast one user.
             if(selectedItem.getChildren().isEmpty()){
                 if((selectedItem.getChildren().isEmpty() && selectedItem.getParent()==adminPanel.getRoot())){
-                    adminPanel.getUserId().setText(selectedItem.getValue());
+                    adminPanel.getUserId().setText(String.valueOf(selectedItem.getValue()));
                     adminPanel.getGroupId().setText("CPP");
                 }
                 else{
-                    adminPanel.getUserId().setText(selectedItem.getValue());
-                    adminPanel.getGroupId().setText(selectedItem.getParent().getValue());
+                    adminPanel.getUserId().setText(String.valueOf(selectedItem.getValue()));
+                    adminPanel.getGroupId().setText(String.valueOf(selectedItem.getParent().getValue()));
                 }
             }
             //Else we're looking at a root or parent AKA a group
             else {
                 adminPanel.getUserId().setText("");
-                adminPanel.getGroupId().setText(selectedItem.getValue());
+                adminPanel.getGroupId().setText(String.valueOf(selectedItem.getValue()));
             }
+
             adminPanel.getAddUser().setOnAction(event -> {
                 TextInputDialog input = new TextInputDialog();
                 input.setTitle("User addition");
                 input.getDialogPane().setContentText("User Name:");
-                input.getDialogPane().setContentText("Group Name:");
                 Optional<String> result = input.showAndWait();
                 TextField inputTF = input.getEditor();
-                if(inputTF.getText()!=null && inputTF.getText().length()!=0 && newValue!=null && oldValue!=null){
-                    adminPanel.createBranch(inputTF.getText(), (TreeItem<String>)newValue);
+                if(inputTF.getText()!=null && inputTF.getText().length()!=0 && newValue!=null){
+                    adminPanel.createBranch(new User(inputTF.getText()), (TreeItem<UserInterface>)newValue);
                     User newUser = new User(inputTF.getText());
                     listOfUsers.add(newUser);
                 }
@@ -92,8 +93,6 @@ public class GUIDriver extends Application {
             //Add one because of default group CS3560 that is statically initialized, I do not count the root as a group to be counted.
             adminPanel.getGroupTotal().setText(String.valueOf(listOfGroups.toArray().length+1));
         });
-
-
 
         adminPanel.getShowUserTotal().setOnAction(event -> {
             adminPanel.getUserTotal().setText(String.valueOf(listOfUsers.toArray().length));
