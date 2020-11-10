@@ -7,10 +7,11 @@ import javafx.scene.shape.Circle;
 //Admin control panel which extends GridPane to utilize features from the GUI class
 public class AdminPanel extends GridPane {
     private static AdminPanel instance;
-    private static TreeView<String> treeView = new TreeView<>();
-    private static TreeItem<String> cs3560, root;
+    private static TreeView<UserInterface> treeView = new TreeView<>();
+    private static TreeItem<UserInterface> cs3560, root;
     private static TextField userId, groupId, groupTotal, userTotal, posPercent, msgTotal;
     private static Button addUser, addGroup, openUserView, showUserTotal, showGroupTotal, showMsgTotal, showPosPercent;
+    private static UserInterface cpp, CS3560;
 
     public static TextField getMsgTotal(){
         if(msgTotal!=null) {
@@ -92,8 +93,8 @@ public class AdminPanel extends GridPane {
         throw new IllegalStateException("Does not exist");
     }
 
-    public static TreeItem<String> createBranch(String name, TreeItem<String> parent){
-        TreeItem<String> treeItem = new TreeItem<>(name);
+    public static TreeItem<UserInterface> createBranch(UserInterface userInterface, TreeItem<UserInterface> parent){
+        TreeItem<UserInterface> treeItem = new TreeItem<>(userInterface);
         treeItem.setExpanded(true);
         parent.getChildren().add(treeItem);
         return treeItem;
@@ -101,13 +102,15 @@ public class AdminPanel extends GridPane {
     private AdminPanel(){
 
     }
-    public static TreeItem<String> getRoot(){
+    public static TreeItem<UserInterface> getRoot(){
        return root;
     }
     public static AdminPanel getInstance(){
         if(instance==null){
-            root = new TreeItem<>("CPP", new Circle(5, Color.BLACK));
-            cs3560 = createBranch("CS3560", root);
+            CS3560 = new UserGroup("CS3560");
+            cpp = new UserGroup("CPP");
+            root = new TreeItem<>(cpp, new Circle(5, Color.BLACK));
+            cs3560 = createBranch(CS3560, root);
             userId = new TextField();
             userId.setPromptText("User ID:");
             userId.setDisable(true);
