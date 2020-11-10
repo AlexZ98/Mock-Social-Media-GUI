@@ -1,0 +1,37 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class User implements UserInterface {
+    private String id;
+    private List<String> followerIds;
+    private List<String> followingIds;
+    private List<List<String>> tweetMsgs;
+
+    public User(String id){
+        this.id = id;
+    }
+    public User(String id, List<String> followerIds, List<String> followingIds, List<List<String>> tweetMsgs){
+        this.id = id;
+        this.followerIds = followerIds;
+        this.followingIds = followingIds;
+        this.tweetMsgs = tweetMsgs;
+    }
+    public void followUser(User user, String userId){
+        if(user.id == userId){
+            user.followerIds.add(this.id);
+            this.followingIds.add(userId);
+        }
+    }
+    public void addFollower(User user, String userId){
+       if(user.id== userId) {
+           this.followerIds.add(userId);
+       }
+    }
+
+    public String toString(){
+        return id;
+    }
+
+
+
+}
