@@ -1,37 +1,90 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class User implements UserInterface {
+public class User extends Subject implements SysEntry, UserInterface, Observer {
     private String id;
     private List<String> followerIds;
     private List<String> followingIds;
     private List<List<String>> tweetMsgs;
+    private static int numberUsers = 0;
+    private static int numberMsgs = 0;
+    private static double posNum = 0;
+    private static double percent = 0;
 
     public User(String id){
         this.id = id;
+        followingIds = new ArrayList<>();
+        followerIds = new ArrayList<>();
+        tweetMsgs = new ArrayList<>();
+        numberUsers++;
     }
     public User(String id, List<String> followerIds, List<String> followingIds, List<List<String>> tweetMsgs){
         this.id = id;
         this.followerIds = followerIds;
         this.followingIds = followingIds;
         this.tweetMsgs = tweetMsgs;
+        numberUsers++;
     }
-    public void followUser(User user, String userId){
-        if(user.id == userId){
-            user.followerIds.add(this.id);
-            this.followingIds.add(userId);
+
+    public void followUser(User user, String id){
+        if(user.toString().equalsIgnoreCase(id)) {
+            user.followerIds.add(this.toString());
+            this.followingIds.add(id);
+            for(int i = 0; i < this.getTweetMsgs().size(); i++) {
+                this.getTweetMsgs().add(user.getTweetMsgs().get(i));
+            }
         }
     }
-    public void addFollower(User user, String userId){
-       if(user.id== userId) {
-           this.followerIds.add(userId);
-       }
+    public int getMsgTotal(){
+         for (List<String> sublist : tweetMsgs) {
+             numberMsgs += sublist.size();
+         }
+        return numberMsgs;
+    }
+    public double getPosPercent(){
+        for(int i =0; i < this.getTweetMsgs().size();i++){
+            for(List<String> sublist : tweetMsgs){
+                      if(sublist.contains("good") || sublist.contains("great") || sublist.contains("amazing")){
+                          posNum++;
+                      }
+            }
+        }
+        return posNum/(double)numberMsgs;
+    }
+    public void Tweet(String tweet){
+        tweetMsgs.add(Collections.singletonList(tweet));
+        notifyObservers();
     }
 
     public String toString(){
         return id;
     }
+    public int getNumberOfUsers(){
+        return numberUsers;
+    }
+    public List<String> getFollowingIds(){
+        return followingIds;
+    }
+    public List<String> getFollowerIds() {
+        return followerIds;
+    }
+    public List<List<String>> getTweetMsgs(){
+        return tweetMsgs;
+    }
+
+    @Override
+    public void accept(SysEntryVisitor sysEntryVisitor) {
+        sysEntryVisitor.visitUserTotal(this);
+    }
 
 
-
+    @Override
+    public void update(Subject subject) {
+        if(subject instanceof User){
+            for(String userId : ((User) subject).getFollowingIds()){
+                getTweetMsgs().add(Collections.singletonList(((User) subject).getTweetMsgs().toString()));
+            }
+        }
+    }
 }
