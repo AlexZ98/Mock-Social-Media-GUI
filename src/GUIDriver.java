@@ -118,15 +118,14 @@ public class GUIDriver extends Application {
                     });
                 ListView<String> newsFeed = new ListView<>();
                 newsFeed.setPrefSize(100,75);
-                ((User)selectedItem.getValue()).getTweetMsgs().forEach((list)->{
-                    newsFeed.getItems().add(String.valueOf(list));
-                });
+                newsFeed.getItems().addAll(((User)selectedItem.getValue()).getTweetMsgs());
+
                 TextField tweet = new TextField();
                 Label news = new Label("Tweets: ");
                 Button postTweet = new Button("Post Tweet");
                     postTweet.setOnAction(event1 -> {
                         ((TreeItem<User>)newValue).getValue().Tweet(tweet.getText());
-                        newsFeed.getItems().add(tweet.getText());
+                        newsFeed.getItems().add(selectedItem.getValue().toString()+ " :"+tweet.getText());
                         tweet.setText("");
                         ((User) selectedItem.getValue()).update((User)selectedItem.getValue());
                     });
@@ -146,20 +145,20 @@ public class GUIDriver extends Application {
             });
         adminPanel.getShowGroupTotal().setOnAction(event ->{
             SysEntryVisitor visitor = new ShowGroupTotalSysEntryVisitor();
-            visitor.visit(groups.get(0));
+            groups.get(0).accept(visitor);
         });
 
         adminPanel.getShowUserTotal().setOnAction(event -> {
             SysEntryVisitor visitor = new ShowUserTotalSysEntryVisitor();
-            visitor.visit(users.get(0));
+            users.get(0).accept(visitor);
         });
         adminPanel.getShowPosPercent().setOnAction(event -> {
             SysEntryVisitor visitor = new ShowPositivePercentSysEntryVisitor();
-            visitor.visit(users.get(0));
+            users.get(0).accept(visitor);
         });
         adminPanel.getShowMsgTotal().setOnAction(event -> {
             SysEntryVisitor visitor  = new ShowMessageTotalSysEntryVisitor();
-            visitor.visit(users.get(0));
+            users.get(0).accept(visitor);;
         });
 
 
