@@ -5,7 +5,7 @@ import javafx.stage.Stage;
 
 public class ShowUserTotalSysEntryVisitor implements SysEntryVisitor {
     @Override
-    public void visitUserTotal(User user) {
+    public void visit(User user) {
         Stage stage = new Stage();
         stage.setTitle("User Total");
         stage.setScene(new Scene( new TextField("Number of Users: "+ String.valueOf(user.getNumberOfUsers())), 450, 450));
@@ -13,14 +13,8 @@ public class ShowUserTotalSysEntryVisitor implements SysEntryVisitor {
     }
 
     @Override
-    public void visitGroupTotal(UserGroup userGroup) {
+    public void visit(UserGroup userGroup) {
     }
 
-    @Override
-    public void visitMessageTotal(User user) {
-    }
 
-    @Override
-    public void visitPositivePercentage(User user) {
-    }
 }
