@@ -10,7 +10,6 @@ public class User extends Subject implements SysEntry, UserInterface, Observer {
     private static int numberUsers = 0;
     private static int numberMsgs = 0;
     private static double posNum = 0;
-    private static double percent = 0;
 
     public User(String id){
         this.id = id;
@@ -31,7 +30,7 @@ public class User extends Subject implements SysEntry, UserInterface, Observer {
         if(user.toString().equalsIgnoreCase(id)) {
             user.followerIds.add(this.toString());
             this.followingIds.add(id);
-            for(int i = 0; i < this.getTweetMsgs().size(); i++) {
+            for(int i = 0; i < user.getTweetMsgs().size();i++){
                 this.getTweetMsgs().add(user.getTweetMsgs().get(i));
             }
         }
@@ -75,7 +74,7 @@ public class User extends Subject implements SysEntry, UserInterface, Observer {
 
     @Override
     public void accept(SysEntryVisitor sysEntryVisitor) {
-        sysEntryVisitor.visitUserTotal(this);
+        sysEntryVisitor.visit(this);
     }
 
 
