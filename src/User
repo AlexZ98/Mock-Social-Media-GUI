@@ -6,7 +6,8 @@ public class User extends Subject implements SysEntry, UserInterface, Observer {
     private String id;
     private List<String> followerIds;
     private List<String> followingIds;
-    private List<List<String>> tweetMsgs;
+    private List<String> tweetMsgs;
+    private List<User> following;
     private static int numberUsers = 0;
     private static int numberMsgs = 0;
     private static double posNum = 0;
@@ -16,9 +17,10 @@ public class User extends Subject implements SysEntry, UserInterface, Observer {
         followingIds = new ArrayList<>();
         followerIds = new ArrayList<>();
         tweetMsgs = new ArrayList<>();
+        following = new ArrayList<>();
         numberUsers++;
     }
-    public User(String id, List<String> followerIds, List<String> followingIds, List<List<String>> tweetMsgs){
+    public User(String id, List<String> followerIds, List<String> followingIds, List<String> tweetMsgs){
         this.id = id;
         this.followerIds = followerIds;
         this.followingIds = followingIds;
@@ -27,23 +29,24 @@ public class User extends Subject implements SysEntry, UserInterface, Observer {
     }
 
     public void followUser(User user, String id){
-        if(user.toString().equalsIgnoreCase(id)) {
+        if(user.toString().equalsIgnoreCase(id) && !user.followerIds.contains(id)) {
             user.followerIds.add(this.toString());
             this.followingIds.add(id);
-            for(int i = 0; i < user.getTweetMsgs().size();i++){
-                this.getTweetMsgs().add(user.getTweetMsgs().get(i));
-            }
+            this.following.add(user);
+            this.getTweetMsgs().addAll(user.getTweetMsgs());
+        }
+    }
+    public void getNewsFeed(){
+        for (User user: following) {
+            this.getTweetMsgs().addAll(user.getTweetMsgs());
         }
     }
     public int getMsgTotal(){
-         for (List<String> sublist : tweetMsgs) {
-             numberMsgs += sublist.size();
-         }
-        return numberMsgs;
+         return tweetMsgs.size();
     }
     public double getPosPercent(){
         for(int i =0; i < this.getTweetMsgs().size();i++){
-            for(List<String> sublist : tweetMsgs){
+            for(String sublist : tweetMsgs){
                       if(sublist.contains("good") || sublist.contains("great") || sublist.contains("amazing")){
                           posNum++;
                       }
@@ -52,7 +55,8 @@ public class User extends Subject implements SysEntry, UserInterface, Observer {
         return posNum/(double)numberMsgs;
     }
     public void Tweet(String tweet){
-        tweetMsgs.add(Collections.singletonList(tweet));
+        tweetMsgs.add(this.toString() + ": " + tweet);
+        getNewsFeed();
         notifyObservers();
     }
 
@@ -68,7 +72,7 @@ public class User extends Subject implements SysEntry, UserInterface, Observer {
     public List<String> getFollowerIds() {
         return followerIds;
     }
-    public List<List<String>> getTweetMsgs(){
+    public List<String> getTweetMsgs(){
         return tweetMsgs;
     }
 
@@ -82,7 +86,7 @@ public class User extends Subject implements SysEntry, UserInterface, Observer {
     public void update(Subject subject) {
         if(subject instanceof User){
             for(String userId : ((User) subject).getFollowingIds()){
-                getTweetMsgs().add(Collections.singletonList(((User) subject).getTweetMsgs().toString()));
+                getTweetMsgs().add((((User) subject).getTweetMsgs().toString()));
             }
         }
     }
