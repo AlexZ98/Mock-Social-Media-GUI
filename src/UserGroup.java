@@ -16,6 +16,6 @@ public class UserGroup implements UserInterface, SysEntry {
 
     @Override
     public void accept(SysEntryVisitor sysEntryVisitor) {
-        sysEntryVisitor.visitGroupTotal(this);
+        sysEntryVisitor.visit(this);
     }
 }
