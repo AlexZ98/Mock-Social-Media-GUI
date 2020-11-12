@@ -146,20 +146,20 @@ public class GUIDriver extends Application {
             });
         adminPanel.getShowGroupTotal().setOnAction(event ->{
             SysEntryVisitor visitor = new ShowGroupTotalSysEntryVisitor();
-            visitor.visitGroupTotal(groups.get(0));
+            visitor.visit(groups.get(0));
         });
 
         adminPanel.getShowUserTotal().setOnAction(event -> {
             SysEntryVisitor visitor = new ShowUserTotalSysEntryVisitor();
-            visitor.visitUserTotal(users.get(0));
+            visitor.visit(users.get(0));
         });
         adminPanel.getShowPosPercent().setOnAction(event -> {
             SysEntryVisitor visitor = new ShowPositivePercentSysEntryVisitor();
-            visitor.visitPositivePercentage(users.get(0));
+            visitor.visit(users.get(0));
         });
         adminPanel.getShowMsgTotal().setOnAction(event -> {
             SysEntryVisitor visitor  = new ShowMessageTotalSysEntryVisitor();
-            visitor.visitMessageTotal(users.get(0));
+            visitor.visit(users.get(0));
         });
 
 
