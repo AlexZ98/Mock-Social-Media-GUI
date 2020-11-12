@@ -2,20 +2,27 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-
+import javafx.scene.shape.Shape;
 
 //Admin control panel which extends GridPane to utilize features from the GUI class
 public class AdminPanel extends GridPane {
     private static AdminPanel instance;
     private static TreeView<UserInterface> treeView = new TreeView<>();
     private static TreeItem<UserInterface> cs3560, root;
-    private static TextField userId, groupId, groupTotal, userTotal, posPercent, msgTotal;
+    private static TextField userId, groupId;
     private static Button addUser, addGroup, openUserView, showUserTotal, showGroupTotal, showMsgTotal, showPosPercent;
     private static UserInterface cpp, CS3560;
+    private static Label userIdLabel, userGroupLabel;
 
-    public static TextField getMsgTotal(){
-        if(msgTotal!=null) {
-            return msgTotal;
+    public static Label getUserIdLabel(){
+        if(userIdLabel!=null){
+            return userIdLabel;
+        }
+        throw new IllegalStateException("Does not exist");
+    }
+    public static Label getUserGroupLabel(){
+        if(userGroupLabel!=null){
+            return userGroupLabel;
         }
         throw new IllegalStateException("Does not exist");
     }
@@ -25,24 +32,7 @@ public class AdminPanel extends GridPane {
         }
         throw new IllegalStateException("Does not exist");
     }
-    public static TextField getGroupTotal(){
-        if(groupTotal!=null) {
-            return groupTotal;
-        }
-        throw new IllegalStateException("Does not exist");
-    }
-    public static TextField getUserTotal(){
-        if(userTotal!=null) {
-            return userTotal;
-        }
-        throw new IllegalStateException("Does not exist");
-    }
-    public static TextField getPosPercent(){
-        if(posPercent!=null) {
-            return posPercent;
-        }
-        throw new IllegalStateException("Does not exist");
-    }
+
 
     public static Button getAddGroup(){
         if(addGroup!=null) {
@@ -92,9 +82,16 @@ public class AdminPanel extends GridPane {
         }
         throw new IllegalStateException("Does not exist");
     }
-
+    //Helper method to add an item to the TreeView
     public static TreeItem<UserInterface> createBranch(UserInterface userInterface, TreeItem<UserInterface> parent){
         TreeItem<UserInterface> treeItem = new TreeItem<>(userInterface);
+        treeItem.setExpanded(true);
+        parent.getChildren().add(treeItem);
+        return treeItem;
+    }
+    //Helper method to add an item to the TreeView, this version allows for including a Shape object (graphic to distinguish between usergroup & users for this purpose)
+    public static TreeItem<UserInterface> createBranch(UserInterface userInterface, TreeItem<UserInterface> parent, Shape shape){
+        TreeItem<UserInterface> treeItem = new TreeItem<>(userInterface, shape);
         treeItem.setExpanded(true);
         parent.getChildren().add(treeItem);
         return treeItem;
@@ -109,35 +106,24 @@ public class AdminPanel extends GridPane {
         if(instance==null){
             CS3560 = new UserGroup("CS3560");
             cpp = new UserGroup("CPP");
+            userGroupLabel = new Label("User Group: ");
+            userIdLabel = new Label("User Name:");
             root = new TreeItem<>(cpp, new Circle(5, Color.BLACK));
-            cs3560 = createBranch(CS3560, root);
+            cs3560 = createBranch(CS3560, root, new Circle(5, Color.BLACK));
             userId = new TextField();
-            userId.setPromptText("User ID:");
             userId.setDisable(true);
             groupId = new TextField();
-            groupId.setPromptText("Group ID");
             groupId.setDisable(true);
-            groupTotal = new TextField();
-            groupTotal.setPromptText("Group Total");
-            groupTotal.setDisable(true);
-            userTotal = new TextField();
-            userTotal.setPromptText("User Total");
-            userTotal.setDisable(true);
-            posPercent = new TextField();
-            posPercent.setPromptText("Percentage of Positive Messages");
-            posPercent.setDisable(true);
             addUser = new Button("Add user");
             addUser.setDisable(true);
             addGroup = new Button("Add group");
             addGroup.setDisable(true);
             openUserView = new Button("Open User View");
+            openUserView.setDisable(true);
             showUserTotal = new Button("Show User Total");
             showGroupTotal = new Button("Show Group Total");
             showMsgTotal = new Button("Show Message Total");
             showPosPercent = new Button("Show Positive Percentage");
-            msgTotal= new TextField();
-            msgTotal.setDisable(true);
-            msgTotal.setPromptText("Total Number of Messages");
 
             instance = new AdminPanel();
 
