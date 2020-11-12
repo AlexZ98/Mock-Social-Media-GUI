@@ -1,0 +1,6 @@
+public interface SysEntryVisitor {
+    public void visitUserTotal(User user);
+    public void visitGroupTotal(UserGroup userGroup);
+    public void visitMessageTotal(User user);
+    public void visitPositivePercentage(User user);
+}
