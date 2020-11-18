@@ -119,21 +119,25 @@ public class GUIDriver extends Application {
                 ListView<String> newsFeed = new ListView<>();
                 newsFeed.setPrefSize(100,75);
                 newsFeed.getItems().addAll(((User)selectedItem.getValue()).getTweetMsgs());
-
                 TextField tweet = new TextField();
                 Label news = new Label("Tweets: ");
                 Button postTweet = new Button("Post Tweet");
                     postTweet.setOnAction(event1 -> {
                         ((TreeItem<User>)newValue).getValue().Tweet(tweet.getText());
-                        newsFeed.getItems().add(selectedItem.getValue().toString()+ " :"+tweet.getText());
                         tweet.setText("");
                         ((User) selectedItem.getValue()).update((User)selectedItem.getValue());
                     });
 
+                Button refresh = new Button("Refresh");
+                refresh.setOnAction(evnt -> {
+                    newsFeed.getItems().clear();
+                    newsFeed.getItems().addAll(((User)selectedItem.getValue()).getTweetMsgs());
+                });
                 gridPane.addRow(0, adminPanel.getUserIdLabel(), adminPanel.getUserId(), followUserButton);
                 gridPane.addRow(1, followers, userListView);
                 gridPane.addRow(2, postTweet, tweet);
                 gridPane.addRow(3, news, newsFeed);
+                gridPane.addRow(4,refresh);
                 gridPane.setVgap(20);
                 gridPane.setHgap(20);
 
