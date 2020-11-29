@@ -23,9 +23,11 @@ public class GUIDriver extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        List<String> uniqueUsers = new ArrayList<>();
         List<User> users = new ArrayList<>();
         List<UserGroup> groups = new ArrayList<>();
+        List<String> userIds = new ArrayList<>();
+        List<String> groupIds = new ArrayList<>();
+        Map<User, Long> map = new HashMap<>();
 
         AdminPanel adminPanel = AdminPanel.getInstance();
         adminPanel.getRoot().setExpanded(true);
@@ -38,8 +40,9 @@ public class GUIDriver extends Application {
         HBox hb2 = new HBox(15, adminPanel.getAddUser(), adminPanel.getAddGroup());
         HBox hb3 = new HBox(15, adminPanel.getShowGroupTotal(), adminPanel.getShowPosPercent());
         HBox hb4 = new HBox(15,adminPanel.getShowUserTotal(), adminPanel.getShowMsgTotal());
-        HBox hb5 = new HBox(15, adminPanel.getOpenUserView());
-        VBox vbox = new VBox(20, hb1, hb2, hb3, hb4, hb5);
+        HBox hb5 = new HBox(15, adminPanel.getOpenUserView(), adminPanel.getIdVerification());
+        HBox hb6 = new HBox(15, adminPanel.getRecentUpdate());
+        VBox vbox = new VBox(20, hb1, hb2, hb3, hb4, hb5, hb6);
         vbox.setAlignment(Pos.TOP_CENTER);
         vbox.setPadding(new Insets(5));
 
@@ -63,7 +66,7 @@ public class GUIDriver extends Application {
             }
             else if(selectedItem.getValue() instanceof UserGroup){
                 adminPanel.getUserId().setText("");
-                adminPanel.getGroupId().setText(String.valueOf(selectedItem.getValue()));
+                adminPanel.getGroupId().setText(String.valueOf(selectedItem.getValue()) + " "+ ((UserGroup)selectedItem.getValue()).getGroupCreated());
                 adminPanel.getOpenUserView().setDisable(true);
                 adminPanel.getAddUser().setDisable(false);
                 adminPanel.getAddGroup().setDisable(false);
@@ -78,10 +81,12 @@ public class GUIDriver extends Application {
                 TextField inputTF = input.getEditor();
                 //Soft input validation, also does not allow adding anything under users only groups, if still attempted nothing will change and program will not produce an error/crash
                 //Also can't add a new user if the given ID was already given to another created user at an earlier point
-                if(!uniqueUsers.contains(inputTF.getText()) && inputTF.getText()!=null && inputTF.getText().length()!=0 && newValue!=null && ((TreeItem<UserInterface>) newValue).getValue() instanceof UserGroup){
+                if(inputTF.getText()!=null && inputTF.getText().length()!=0 && newValue!=null && ((TreeItem<UserInterface>) newValue).getValue() instanceof UserGroup){
                     User newUser = new User(inputTF.getText());
-                    uniqueUsers.add(inputTF.getText());
+                    long userCreated = System.currentTimeMillis();
                     users.add(newUser);
+                    userIds.add(newUser.toString());
+                    map.put(newUser, newUser.getUserCreated());
                     adminPanel.createBranch(newUser, (TreeItem<UserInterface>)newValue);
                 }
             });
@@ -97,7 +102,7 @@ public class GUIDriver extends Application {
                     UserGroup newUserGroup = new UserGroup(inputTF.getText());
                     adminPanel.createBranch(newUserGroup, (TreeItem<UserInterface>)newValue, new Circle(5, Color.BLACK));
                     groups.add(newUserGroup);
-
+                    groupIds.add(newUserGroup.toString());
                 }
             });
             adminPanel.getOpenUserView().setOnAction(event -> {
@@ -108,6 +113,8 @@ public class GUIDriver extends Application {
                 userListView.setPrefSize(100,75);
                 userListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
                 userListView.getItems().addAll(((TreeItem<User>) newValue).getValue().getFollowerIds());
+                Label creationTime = new Label("Time Created: " + ((User)selectedItem.getValue()).getCreationTime());
+                Label updateTime = new Label("Last Time Updated: " + ((User)selectedItem.getValue()).getLastUpdated());
                 Label followers = new Label("Followers");
                 Button followUserButton = new Button("Follow " + selectedItem.getValue().toString());
                     followUserButton.setOnAction(event2 -> {
@@ -126,22 +133,25 @@ public class GUIDriver extends Application {
                         ((TreeItem<User>)newValue).getValue().Tweet(tweet.getText());
                         tweet.setText("");
                         ((User) selectedItem.getValue()).update((User)selectedItem.getValue());
+                        updateTime.setText("Last Time Updated: " + ((User)selectedItem.getValue()).getLastUpdated());
                     });
 
                 Button refresh = new Button("Refresh");
                 refresh.setOnAction(evnt -> {
                     newsFeed.getItems().clear();
                     newsFeed.getItems().addAll(((User)selectedItem.getValue()).getTweetMsgs());
+                    updateTime.setText("Last Time Updated: " + ((User)selectedItem.getValue()).getLastUpdated());
                 });
-                gridPane.addRow(0, adminPanel.getUserIdLabel(), adminPanel.getUserId(), followUserButton);
+
+                gridPane.addRow(0, adminPanel.getUserIdLabel(), adminPanel.getUserId(), creationTime, followUserButton);
                 gridPane.addRow(1, followers, userListView);
                 gridPane.addRow(2, postTweet, tweet);
                 gridPane.addRow(3, news, newsFeed);
-                gridPane.addRow(4,refresh);
+                gridPane.addRow(4,refresh, updateTime);
                 gridPane.setVgap(20);
                 gridPane.setHgap(20);
 
-                stage.setScene(new Scene( gridPane, 500, 500));
+                stage.setScene(new Scene( gridPane, 750, 500));
                 stage.show();
 
             });
@@ -164,6 +174,23 @@ public class GUIDriver extends Application {
             SysEntryVisitor visitor  = new ShowMessageTotalSysEntryVisitor();
             users.get(0).accept(visitor);;
         });
+        adminPanel.getIdVerification().setOnAction(event -> {
+            if(hasDuplicates(userIds) || hasDuplicates(groupIds)){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText("Unique Identification");
+                alert.setContentText("Detected an nonunique user or group");
+                alert.show();
+            }
+
+
+        });
+        adminPanel.getRecentUpdate().setOnAction(event -> {
+            TreeMap<User, Long> treeMap = new TreeMap<>(map);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Recent Updates");
+            alert.setContentText("User with most recent updates: " + treeMap.lastKey());
+            alert.show();
+        });
 
 
         Scene myScene = new Scene(adminPanel, 900, 600);
@@ -172,5 +199,16 @@ public class GUIDriver extends Application {
         primaryStage.setTitle("Twitter");
         primaryStage.show();
     }
-
+    public static <T> boolean hasDuplicates(List<T> list){
+        ArrayList<T> newList = new ArrayList<T>();
+        for (T element : list) {
+            if (!newList.contains(element)) {
+                newList.add(element);
+            }
+            else if(newList.contains(element)){
+                return true;
+            }
+        }
+        return false;
+    }
 }
