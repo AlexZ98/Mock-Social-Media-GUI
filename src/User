@@ -1,9 +1,11 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
-public class User extends Subject implements SysEntry, UserInterface, Observer {
+public class User extends Subject implements SysEntry, UserInterface, Observer, Comparable<User> {
     private String id;
+    private long userCreated, lastUpdated;
     private List<String> followerIds;
     private List<String> followingIds;
     private List<String> tweetMsgs;
@@ -19,6 +21,8 @@ public class User extends Subject implements SysEntry, UserInterface, Observer {
         tweetMsgs = new ArrayList<>();
         following = new ArrayList<>();
         numberUsers++;
+        userCreated = System.currentTimeMillis();
+        lastUpdated = System.currentTimeMillis();
     }
     public User(String id, List<String> followerIds, List<String> followingIds, List<String> tweetMsgs){
         this.id = id;
@@ -41,6 +45,12 @@ public class User extends Subject implements SysEntry, UserInterface, Observer {
             this.getTweetMsgs().addAll(user.getTweetMsgs());
         }
     }
+    public Date getCreationTime(){
+        return new Date(userCreated);
+    }
+    public Date getLastUpdated(){
+        return new Date(lastUpdated);
+    }
     public int getMsgTotal(){
          return tweetMsgs.size();
     }
@@ -56,6 +66,7 @@ public class User extends Subject implements SysEntry, UserInterface, Observer {
     }
     public void Tweet(String tweet){
         tweetMsgs.add(this.toString() + ": " + tweet);
+        lastUpdated = System.currentTimeMillis();
         getNewsFeed();
         notifyObservers();
     }
@@ -66,6 +77,7 @@ public class User extends Subject implements SysEntry, UserInterface, Observer {
     public int getNumberOfUsers(){
         return numberUsers;
     }
+    public long getUserCreated(){return userCreated;}
     public List<String> getFollowingIds(){
         return followingIds;
     }
@@ -89,5 +101,10 @@ public class User extends Subject implements SysEntry, UserInterface, Observer {
                 getTweetMsgs().add((((User) subject).getTweetMsgs().toString()));
             }
         }
+    }
+
+    @Override
+    public int compareTo(User user) {
+        return (int)(this.lastUpdated - user.lastUpdated);
     }
 }
