@@ -10,7 +10,7 @@ public class AdminPanel extends GridPane {
     private static TreeView<UserInterface> treeView = new TreeView<>();
     private static TreeItem<UserInterface> cs3560, root;
     private static TextField userId, groupId;
-    private static Button addUser, addGroup, openUserView, showUserTotal, showGroupTotal, showMsgTotal, showPosPercent;
+    private static Button addUser, addGroup, openUserView, showUserTotal, showGroupTotal, showMsgTotal, showPosPercent, idVerification, recentUpdate;
     private static UserInterface cpp, CS3560;
     private static Label userIdLabel, userGroupLabel;
 
@@ -26,9 +26,21 @@ public class AdminPanel extends GridPane {
         }
         throw new IllegalStateException("Does not exist");
     }
+    public static Button getIdVerification() {
+        if(idVerification!=null){
+            return idVerification;
+        }
+        throw new IllegalStateException("Does not exist");
+    }
     public static Button getShowGroupTotal(){
         if(showGroupTotal!=null){
             return showGroupTotal;
+        }
+        throw new IllegalStateException("Does not exist");
+    }
+    public static Button getRecentUpdate(){
+        if(recentUpdate!=null){
+            return recentUpdate;
         }
         throw new IllegalStateException("Does not exist");
     }
@@ -124,6 +136,8 @@ public class AdminPanel extends GridPane {
             showGroupTotal = new Button("Show Group Total");
             showMsgTotal = new Button("Show Message Total");
             showPosPercent = new Button("Show Positive Percentage");
+            idVerification = new Button("Verify ID's");
+            recentUpdate = new Button("Most Recently Updated User");
 
             instance = new AdminPanel();
 
