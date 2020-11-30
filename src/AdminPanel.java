@@ -7,16 +7,22 @@ import javafx.scene.shape.Shape;
 //Admin control panel which extends GridPane to utilize features from the GUI class
 public class AdminPanel extends GridPane {
     private static AdminPanel instance;
-    private static TreeView<UserInterface> treeView = new TreeView<>();
+    private static TreeView<UserInterface> treeView;
     private static TreeItem<UserInterface> cs3560, root;
     private static TextField userId, groupId;
     private static Button addUser, addGroup, openUserView, showUserTotal, showGroupTotal, showMsgTotal, showPosPercent, idVerification, recentUpdate;
     private static UserInterface cpp, CS3560;
-    private static Label userIdLabel, userGroupLabel;
+    private static Label userIdLabel, userGroupLabel, groupCreationTime;
 
     public static Label getUserIdLabel(){
         if(userIdLabel!=null){
             return userIdLabel;
+        }
+        throw new IllegalStateException("Does not exist");
+    }
+    public static Label getGroupCreationTime(){
+        if(groupCreationTime!=null){
+            return groupCreationTime;
         }
         throw new IllegalStateException("Does not exist");
     }
@@ -116,6 +122,7 @@ public class AdminPanel extends GridPane {
     }
     public static AdminPanel getInstance(){
         if(instance==null){
+            treeView = new TreeView<>();
             CS3560 = new UserGroup("CS3560");
             cpp = new UserGroup("CPP");
             userGroupLabel = new Label("User Group: ");
@@ -138,13 +145,9 @@ public class AdminPanel extends GridPane {
             showPosPercent = new Button("Show Positive Percentage");
             idVerification = new Button("Verify ID's");
             recentUpdate = new Button("Most Recently Updated User");
-
+            groupCreationTime = new Label();
             instance = new AdminPanel();
-
         }
         return instance;
     }
-
-
-
 }
