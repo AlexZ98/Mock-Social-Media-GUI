@@ -70,7 +70,7 @@ public class GUIDriver extends Application {
                 adminPanel.getOpenUserView().setDisable(true);
                 adminPanel.getAddUser().setDisable(false);
                 adminPanel.getAddGroup().setDisable(false);
-                adminPanel.getGroupCreationTime().setText(((UserGroup)selectedItem.getValue()).getGroupCreated().toString());
+                adminPanel.getGroupCreationTime().setText("Group Created: "+((UserGroup)selectedItem.getValue()).getGroupCreated().toString());
             }
 
             adminPanel.getAddUser().setOnAction(event -> {
