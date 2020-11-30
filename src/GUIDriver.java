@@ -177,10 +177,10 @@ public class GUIDriver extends Application {
             users.get(0).accept(visitor);;
         });
         adminPanel.getIdVerification().setOnAction(event -> {
-            if(hasDuplicates(userIds) || hasDuplicates(groupIds)){
+            if(hasDuplicates(userIds) || hasDuplicates(groupIds) || hasSpaces(userIds) || hasSpaces(groupIds)){
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setHeaderText("Unique Identification");
-                alert.setContentText("Detected an nonunique user or group");
+                alert.setHeaderText("User/Group ID Verification");
+                alert.setContentText("Detected an invalid User/Group ID (Non-unique ID or a an ID containing a blank space)");
                 alert.show();
             }
         });
@@ -198,6 +198,15 @@ public class GUIDriver extends Application {
         primaryStage.setTitle("Twitter");
         primaryStage.show();
     }
+    public static <T> boolean hasSpaces(List<T> list){
+        for(T element : list){
+            if(element.toString().contains(" ")){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static <T> boolean hasDuplicates(List<T> list){
         ArrayList<T> newList = new ArrayList<T>();
         for (T element : list) {
