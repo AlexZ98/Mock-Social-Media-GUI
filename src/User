@@ -65,8 +65,8 @@ public class User extends Subject implements SysEntry, UserInterface, Observer, 
         return posNum/(double)numberMsgs;
     }
     public void Tweet(String tweet){
-        tweetMsgs.add(this.toString() + ": " + tweet);
         lastUpdated = System.currentTimeMillis();
+        tweetMsgs.add("("+ this.toString() + ")" + ": " + tweet);
         getNewsFeed();
         notifyObservers();
     }
