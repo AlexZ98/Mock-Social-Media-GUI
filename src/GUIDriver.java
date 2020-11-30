@@ -139,13 +139,8 @@ public class AdminPanel extends GridPane {
             showPosPercent = new Button("Show Positive Percentage");
             idVerification = new Button("Verify ID's");
             recentUpdate = new Button("Most Recently Updated User");
-
             instance = new AdminPanel();
-
         }
         return instance;
     }
-
-
-
 }
