@@ -153,8 +153,11 @@ public class GUIDriver extends Application {
                 gridPane.setVgap(20);
                 gridPane.setHgap(20);
 
-                stage.setScene(new Scene( gridPane, 750, 500));
+                Scene scene = new Scene(gridPane, 750, 500);
+                scene.getStylesheets().add("myStyles.css");
+                stage.setScene(scene);
                 stage.show();
+
 
             });
 
@@ -192,8 +195,8 @@ public class GUIDriver extends Application {
             alert.show();
         });
 
-        Scene myScene = new Scene(adminPanel, 1000, 700);
-
+        Scene myScene = new Scene(adminPanel, 1200, 600);
+        myScene.getStylesheets().add("myStyles.css");
         primaryStage.setScene(myScene);
         primaryStage.setTitle("Twitter");
         primaryStage.show();
