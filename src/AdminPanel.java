@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
-//Admin control panel which extends GridPane to utilize features from the GUI class
+//Singleton Admin control panel which extends GridPane to utilize features from the GUI class
 public class AdminPanel extends GridPane {
     private static AdminPanel instance;
     private static TreeView<UserInterface> treeView;
@@ -120,6 +120,7 @@ public class AdminPanel extends GridPane {
     public static TreeItem<UserInterface> getRoot(){
        return root;
     }
+    //Singleton instance, defined the main GUI elements in the singleton in this implementation.
     public static AdminPanel getInstance(){
         if(instance==null){
             treeView = new TreeView<>();
