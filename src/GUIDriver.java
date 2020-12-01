@@ -36,15 +36,15 @@ public class GUIDriver extends Application {
         StackPane treeContainer = new StackPane();
         treeContainer.getChildren().add(treeView);
 
-        HBox hb1 = new HBox(15,adminPanel.getUserIdLabel(), adminPanel.getUserId(),adminPanel.getUserGroupLabel(), adminPanel.getGroupId(), adminPanel.getGroupCreationTime());
-        HBox hb2 = new HBox(15, adminPanel.getAddUser(), adminPanel.getAddGroup());
-        HBox hb3 = new HBox(15, adminPanel.getShowGroupTotal(), adminPanel.getShowPosPercent());
-        HBox hb4 = new HBox(15,adminPanel.getShowUserTotal(), adminPanel.getShowMsgTotal());
-        HBox hb5 = new HBox(15, adminPanel.getOpenUserView(), adminPanel.getIdVerification());
-        HBox hb6 = new HBox(15, adminPanel.getIdVerification());
-        HBox hb7 = new HBox(15, adminPanel.getRecentUpdate());
-        
-        VBox vbox = new VBox(20, hb1, hb2, hb3, hb4, hb5, hb6, hb7);
+       HBox hb1 = new HBox(15,adminPanel.getUserIdLabel(), adminPanel.getUserId());
+        HBox hb2 = new HBox(15, adminPanel.getUserGroupLabel(), adminPanel.getGroupId(), adminPanel.getGroupCreationTime());
+        HBox hb3 = new HBox(15, adminPanel.getAddUser(), adminPanel.getAddGroup());
+        HBox hb4 = new HBox(15, adminPanel.getShowGroupTotal(), adminPanel.getShowPosPercent());
+        HBox hb5 = new HBox(15,adminPanel.getShowUserTotal(), adminPanel.getShowMsgTotal());
+        HBox hb6 = new HBox(15, adminPanel.getOpenUserView());
+        HBox hb7 = new HBox(adminPanel.getIdVerification());
+        HBox hb8 = new HBox(15, adminPanel.getRecentUpdate());
+        VBox vbox = new VBox(20, hb1, hb2, hb3, hb4, hb5, hb6, hb7, hb8);
         vbox.setAlignment(Pos.TOP_CENTER);
         vbox.setPadding(new Insets(5));
 
