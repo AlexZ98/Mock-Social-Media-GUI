@@ -41,8 +41,10 @@ public class GUIDriver extends Application {
         HBox hb3 = new HBox(15, adminPanel.getShowGroupTotal(), adminPanel.getShowPosPercent());
         HBox hb4 = new HBox(15,adminPanel.getShowUserTotal(), adminPanel.getShowMsgTotal());
         HBox hb5 = new HBox(15, adminPanel.getOpenUserView(), adminPanel.getIdVerification());
-        HBox hb6 = new HBox(15, adminPanel.getRecentUpdate());
-        VBox vbox = new VBox(20, hb1, hb2, hb3, hb4, hb5, hb6);
+        HBox hb6 = new HBox(15, adminPanel.getIdVerification());
+        HBox hb7 = new HBox(15, adminPanel.getRecentUpdate());
+        
+        VBox vbox = new VBox(20, hb1, hb2, hb3, hb4, hb5, hb6, hb7);
         vbox.setAlignment(Pos.TOP_CENTER);
         vbox.setPadding(new Insets(5));
 
