@@ -40,11 +40,6 @@ public class User extends Subject implements SysEntry, UserInterface, Observer, 
             this.getTweetMsgs().addAll(user.getTweetMsgs());
         }
     }
-    public void getNewsFeed(){
-        for (User user: following) {
-            this.getTweetMsgs().addAll(user.getTweetMsgs());
-        }
-    }
     public Date getCreationTime(){
         return new Date(userCreated);
     }
@@ -67,7 +62,6 @@ public class User extends Subject implements SysEntry, UserInterface, Observer, 
     public void Tweet(String tweet){
         lastUpdated = System.currentTimeMillis();
         tweetMsgs.add("("+ this.toString() + ")" + ": " + tweet);
-        getNewsFeed();
         notifyObservers();
     }
 
