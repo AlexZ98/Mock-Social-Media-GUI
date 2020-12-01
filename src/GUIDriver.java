@@ -121,6 +121,11 @@ public class GUIDriver extends Application {
                 Label updateTime = new Label("Last Time Updated: " + ((User)selectedItem.getValue()).getLastUpdated());
                 Label followers = new Label("Followers");
                 Button followUserButton = new Button("Follow " + selectedItem.getValue().toString());
+                followUserButton.setDisable(true);
+                //Enable follow user button if the previously selected Tree Item was a different user
+                if(previousItem.getValue() instanceof User && selectedItem.getValue() instanceof User && previousItem != selectedItem){
+                    followUserButton.setDisable(false);
+                }
                     followUserButton.setOnAction(event2 -> {
                         if(previousItem.getValue() instanceof User && selectedItem.getValue() instanceof User && previousItem!=selectedItem && selectedItem!=null && previousItem!=null){
                             ((User) previousItem.getValue()).followUser((User) selectedItem.getValue(),selectedItem.getValue().toString());
