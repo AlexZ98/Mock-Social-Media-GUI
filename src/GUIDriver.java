@@ -196,7 +196,7 @@ public class GUIDriver extends Application {
             alert.show();
         });
 
-        Scene myScene = new Scene(adminPanel, 1200, 600);
+        Scene myScene = new Scene(adminPanel, 650, 400);
         primaryStage.setScene(myScene);
         primaryStage.setTitle("Twitter");
         primaryStage.show();
