@@ -127,9 +127,10 @@ public class GUIDriver extends Application {
                     followUserButton.setDisable(false);
                 }
                     followUserButton.setOnAction(event2 -> {
-                        if(previousItem.getValue() instanceof User && selectedItem.getValue() instanceof User && previousItem!=selectedItem && selectedItem!=null && previousItem!=null){
-                            ((User) previousItem.getValue()).followUser((User) selectedItem.getValue(),selectedItem.getValue().toString());
-                            userListView.getItems().add(String.valueOf(((TreeItem<User>) oldValue).getValue()));
+                        if(previousItem.getValue() instanceof User && selectedItem.getValue() instanceof User && previousItem!=selectedItem && !((User) previousItem.getValue()).getFollowingIds().contains(selectedItem.getValue().toString())){
+                                ((User) previousItem.getValue()).followUser((User) selectedItem.getValue(),selectedItem.getValue().toString());
+                                ((User) previousItem.getValue()).attach(((User)selectedItem.getValue()));
+                                userListView.getItems().add(String.valueOf(((TreeItem<User>) oldValue).getValue()));
                         };
                     });
                 ListView<String> newsFeed = new ListView<>();
