@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import java.util.*;
 
 public class GUIDriver extends Application {
-//Main driver class which supports a main method that runs the entire program and the GUI
+    //Main driver class which supports a main method that runs the entire program and the GUI
     public static void main(String[] args) {
         launch(args);
 
@@ -36,7 +36,7 @@ public class GUIDriver extends Application {
         StackPane treeContainer = new StackPane();
         treeContainer.getChildren().add(treeView);
 
-       HBox hb1 = new HBox(15,adminPanel.getUserIdLabel(), adminPanel.getUserId());
+        HBox hb1 = new HBox(15,adminPanel.getUserIdLabel(), adminPanel.getUserId());
         HBox hb2 = new HBox(15, adminPanel.getUserGroupLabel(), adminPanel.getGroupId(), adminPanel.getGroupCreationTime());
         HBox hb3 = new HBox(15, adminPanel.getAddUser(), adminPanel.getAddGroup());
         HBox hb4 = new HBox(15, adminPanel.getShowGroupTotal(), adminPanel.getShowPosPercent());
@@ -55,7 +55,7 @@ public class GUIDriver extends Application {
 
         //Lambda function that attaches an event listener to tree items so that when a user presses on one of them an event triggers and runs this code
         treeView.getSelectionModel().selectedItemProperty().addListener((ChangeListener) (observable, oldValue, newValue) -> {
-        //In my implementation, I disable the ability to add users or groups until you navigate through a treeview item so that you can add one to the root you are at
+            //In my implementation, I disable the ability to add users or groups until you navigate through a treeview item so that you can add one to the root you are at
             TreeItem<UserInterface> selectedItem = (TreeItem<UserInterface>) newValue;
             TreeItem<UserInterface> previousItem = (TreeItem<UserInterface>) oldValue;
             //differentiate between users and user groups to get correct info displayed in textfields, and opens up certain features to be accessible by the user
@@ -126,27 +126,26 @@ public class GUIDriver extends Application {
                 if(previousItem.getValue() instanceof User && selectedItem.getValue() instanceof User && previousItem != selectedItem){
                     followUserButton.setDisable(false);
                 }
-                    followUserButton.setOnAction(event2 -> {
-                        if(previousItem.getValue() instanceof User && selectedItem.getValue() instanceof User && previousItem!=selectedItem && !((User) previousItem.getValue()).getFollowingIds().contains(selectedItem.getValue().toString())){
-                                ((User) previousItem.getValue()).followUser((User) selectedItem.getValue(),selectedItem.getValue().toString());
-                                ((User) previousItem.getValue()).attach(((User)selectedItem.getValue()));
-                                userListView.getItems().add(String.valueOf(((TreeItem<User>) oldValue).getValue()));
-                        };
-                    });
+                followUserButton.setOnAction(event2 -> {
+                    if(previousItem.getValue() instanceof User && selectedItem.getValue() instanceof User && previousItem!=selectedItem && !((User) previousItem.getValue()).getFollowingIds().contains(selectedItem.getValue().toString())){
+                        ((User) previousItem.getValue()).followUser((User) selectedItem.getValue(),selectedItem.getValue().toString());
+                        ((User) previousItem.getValue()).attach(((User)selectedItem.getValue()));
+                        userListView.getItems().add(String.valueOf(((TreeItem<User>) oldValue).getValue()));
+                    };
+                });
                 ListView<String> newsFeed = new ListView<>();
                 newsFeed.setPrefSize(100,75);
                 newsFeed.getItems().addAll(((User)selectedItem.getValue()).getTweetMsgs());
                 TextField tweet = new TextField();
                 Label news = new Label("Tweets: ");
                 Button postTweet = new Button("Post Tweet");
-                    postTweet.setOnAction(event1 -> {
-                        ((TreeItem<User>)newValue).getValue().Tweet(tweet.getText());
-                        newsFeed.getItems().clear();
-                        newsFeed.getItems().addAll(((User)selectedItem.getValue()).getTweetMsgs());
-                        tweet.setText("");
-                        ((User) selectedItem.getValue()).update((User)selectedItem.getValue());
-                        updateTime.setText("Last Time Updated: " + ((User)selectedItem.getValue()).getLastUpdated());
-                    });
+                postTweet.setOnAction(event1 -> {
+                    ((TreeItem<User>)newValue).getValue().Tweet(tweet.getText());
+                    newsFeed.getItems().clear();
+                    newsFeed.getItems().addAll(((User)selectedItem.getValue()).getTweetMsgs());
+                    tweet.setText("");
+                    updateTime.setText("Last Time Updated: " + ((User)selectedItem.getValue()).getLastUpdated());
+                });
 
                 Button refresh = new Button("Refresh");
                 refresh.setOnAction(evnt -> {
@@ -170,7 +169,7 @@ public class GUIDriver extends Application {
 
             });
 
-            });
+        });
         adminPanel.getShowGroupTotal().setOnAction(event ->{
             SysEntryVisitor visitor = new ShowGroupTotalSysEntryVisitor();
             if(groups.size()>0) {
