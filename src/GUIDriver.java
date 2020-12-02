@@ -171,20 +171,28 @@ public class GUIDriver extends Application {
             });
         adminPanel.getShowGroupTotal().setOnAction(event ->{
             SysEntryVisitor visitor = new ShowGroupTotalSysEntryVisitor();
-            groups.get(0).accept(visitor);
+            if(groups.size()>0) {
+                groups.get(0).accept(visitor);
+            }
         });
 
         adminPanel.getShowUserTotal().setOnAction(event -> {
             SysEntryVisitor visitor = new ShowUserTotalSysEntryVisitor();
-            users.get(0).accept(visitor);
+            if(users.size()>0) {
+                users.get(0).accept(visitor);
+            }
         });
         adminPanel.getShowPosPercent().setOnAction(event -> {
             SysEntryVisitor visitor = new ShowPositivePercentSysEntryVisitor();
-            users.get(0).accept(visitor);
+            if(users.size()>0) {
+                users.get(0).accept(visitor);
+            }
         });
         adminPanel.getShowMsgTotal().setOnAction(event -> {
             SysEntryVisitor visitor  = new ShowMessageTotalSysEntryVisitor();
-            users.get(0).accept(visitor);;
+            if(users.size()>0) {
+                users.get(0).accept(visitor);
+            }
         });
         adminPanel.getIdVerification().setOnAction(event -> {
             if(hasDuplicates(userIds) || hasDuplicates(groupIds) || hasSpaces(userIds) || hasSpaces(groupIds)){
