@@ -6,9 +6,9 @@ public abstract class Subject{
     public void attach(Observer observer){
         observers.add(observer);
     }
-    public void notifyObservers(){
+    public void notifyObservers(String tweet){
         for(Observer observer: observers){
-            observer.update(this);
+            observer.update(this, tweet);
         }
     }
 
