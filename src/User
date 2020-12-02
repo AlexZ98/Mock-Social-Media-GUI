@@ -52,8 +52,7 @@ public class User extends Subject implements SysEntry, UserInterface, Observer, 
         return posNum/(double)numberMsgs;
     }
     public void Tweet(String tweet){
-        lastUpdated = System.currentTimeMillis();
-        tweetMsgs.add("("+ this.toString() + ")" + ": " + tweet);
+        update(this, tweet);
         notifyObservers(tweet);
     }
 
@@ -83,7 +82,8 @@ public class User extends Subject implements SysEntry, UserInterface, Observer, 
     @Override
     public void update(Subject subject, String tweet) {
         if(subject instanceof User){
-            this.tweetMsgs.add(tweet);
+            lastUpdated = System.currentTimeMillis();
+            this.tweetMsgs.add("("+ this.toString() + ")" + ": " + tweet);
         }
     }
 
