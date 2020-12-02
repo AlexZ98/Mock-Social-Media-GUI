@@ -141,6 +141,8 @@ public class GUIDriver extends Application {
                 Button postTweet = new Button("Post Tweet");
                     postTweet.setOnAction(event1 -> {
                         ((TreeItem<User>)newValue).getValue().Tweet(tweet.getText());
+                        newsFeed.getItems().clear();
+                        newsFeed.getItems().addAll(((User)selectedItem.getValue()).getTweetMsgs());
                         tweet.setText("");
                         ((User) selectedItem.getValue()).update((User)selectedItem.getValue());
                         updateTime.setText("Last Time Updated: " + ((User)selectedItem.getValue()).getLastUpdated());
