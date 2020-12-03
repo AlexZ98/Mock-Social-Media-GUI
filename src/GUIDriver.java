@@ -65,6 +65,7 @@ public class GUIDriver extends Application {
                 adminPanel.getOpenUserView().setDisable(false);
                 adminPanel.getAddUser().setDisable(true);
                 adminPanel.getAddGroup().setDisable(true);
+                //HW 3
                 adminPanel.getGroupCreationTime().setText("Group Created: " + ((UserGroup)selectedItem.getParent().getValue()).getGroupCreated());
             }
             else if(selectedItem.getValue() instanceof UserGroup){
@@ -73,6 +74,7 @@ public class GUIDriver extends Application {
                 adminPanel.getOpenUserView().setDisable(true);
                 adminPanel.getAddUser().setDisable(false);
                 adminPanel.getAddGroup().setDisable(false);
+                //HW 3
                 adminPanel.getGroupCreationTime().setText("Group Created: "+((UserGroup)selectedItem.getValue()).getGroupCreated().toString());
             }
 
@@ -114,7 +116,7 @@ public class GUIDriver extends Application {
                 stage.setTitle("User View");
                 GridPane gridPane = new GridPane();
                 ListView<String> userListView = new ListView<>();
-                userListView.setPrefSize(100,75);
+                userListView.setPrefSize(50,125);
                 userListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
                 userListView.getItems().addAll(((TreeItem<User>) newValue).getValue().getFollowerIds());
                 Label creationTime = new Label("Time Created: " + ((User)selectedItem.getValue()).getCreationTime());
@@ -133,7 +135,7 @@ public class GUIDriver extends Application {
                     };
                 });
                 ListView<String> newsFeed = new ListView<>();
-                newsFeed.setPrefSize(100,75);
+                newsFeed.setPrefSize(75,125);
                 newsFeed.getItems().addAll(((User)selectedItem.getValue()).getTweetMsgs());
                 TextField tweet = new TextField();
                 Label news = new Label("Tweets: ");
@@ -150,18 +152,20 @@ public class GUIDriver extends Application {
                 refresh.setOnAction(evnt -> {
                     newsFeed.getItems().clear();
                     newsFeed.getItems().addAll(((User)selectedItem.getValue()).getTweetMsgs());
+                    //HW 3
                     updateTime.setText("Last Time Updated: " + ((User)selectedItem.getValue()).getLastUpdated());
                 });
 
-                gridPane.addRow(0, adminPanel.getUserIdLabel(), adminPanel.getUserId(), creationTime, followUserButton);
-                gridPane.addRow(1, followers, userListView);
-                gridPane.addRow(2, postTweet, tweet);
-                gridPane.addRow(3, news, newsFeed);
-                gridPane.addRow(4,refresh, updateTime);
+                gridPane.addRow(0, adminPanel.getUserIdLabel(), adminPanel.getUserId(), followUserButton);
+                gridPane.addRow(1, creationTime);
+                gridPane.addRow(2, followers, userListView);
+                gridPane.addRow(3, postTweet, tweet);
+                gridPane.addRow(4, news, newsFeed);
+                gridPane.addRow(5,refresh, updateTime);
                 gridPane.setVgap(20);
                 gridPane.setHgap(20);
 
-                Scene scene = new Scene(gridPane, 900, 600);
+                Scene scene = new Scene(gridPane, 600, 600);             
                 stage.setScene(scene);
                 stage.show();
 
@@ -194,6 +198,7 @@ public class GUIDriver extends Application {
                 users.get(0).accept(visitor);
             }
         });
+        //HW 3
         adminPanel.getIdVerification().setOnAction(event -> {
             if(hasDuplicates(userIds) || hasDuplicates(groupIds) || hasSpaces(userIds) || hasSpaces(groupIds)){
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -202,6 +207,7 @@ public class GUIDriver extends Application {
                 alert.show();
             }
         });
+        //HW 3
         adminPanel.getRecentUpdate().setOnAction(event -> {
             TreeMap<User, Long> treeMap = new TreeMap<>(map);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
