@@ -136,14 +136,14 @@ public class GUIDriver extends Application {
                 });
                 ListView<String> newsFeed = new ListView<>();
                 newsFeed.setPrefSize(75,125);
-                newsFeed.getItems().addAll(((User)selectedItem.getValue()).getNewsFeed());
+                newsFeed.getItems().addAll(((User)selectedItem.getValue()).getTweetMsgs());
                 TextField tweet = new TextField();
                 Label news = new Label("Tweets: ");
                 Button postTweet = new Button("Post Tweet");
                 postTweet.setOnAction(event1 -> {
                     ((TreeItem<User>)newValue).getValue().Tweet(tweet.getText());
                     newsFeed.getItems().clear();
-                    newsFeed.getItems().addAll(((User)selectedItem.getValue()).getNewsFeed());
+                    newsFeed.getItems().addAll(((User)selectedItem.getValue()).getTweetMsgs());
                     tweet.setText("");
                     updateTime.setText("Last Time Updated: " + ((User)selectedItem.getValue()).getLastUpdated());
                 });
@@ -151,7 +151,7 @@ public class GUIDriver extends Application {
                 Button refresh = new Button("Refresh");
                 refresh.setOnAction(evnt -> {
                     newsFeed.getItems().clear();
-                    newsFeed.getItems().addAll(((User)selectedItem.getValue()).getNewsFeed());
+                    newsFeed.getItems().addAll(((User)selectedItem.getValue()).getTweetMsgs());
                     //HW 3
                     updateTime.setText("Last Time Updated: " + ((User)selectedItem.getValue()).getLastUpdated());
                 });
@@ -165,7 +165,7 @@ public class GUIDriver extends Application {
                 gridPane.setVgap(20);
                 gridPane.setHgap(20);
 
-                Scene scene = new Scene(gridPane, 600, 600);
+                Scene scene = new Scene(gridPane, 600, 600);             
                 stage.setScene(scene);
                 stage.show();
 
