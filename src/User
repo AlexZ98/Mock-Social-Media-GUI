@@ -84,7 +84,7 @@ public class User extends Subject implements SysEntry, UserInterface, Observer, 
     public void update(Subject subject, String tweet) {
         if(subject instanceof User){
             lastUpdated = System.currentTimeMillis();
-            ((User)subject).tweetMsgs.add("("+ subject.toString() + ")" + ": " + tweet);
+            this.tweetMsgs.add("("+ this.toString() + ")" + ": " + tweet);
         }
     }
 
